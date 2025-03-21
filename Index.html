@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Girasoles Para Ti</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #87CEEB, #e0f7ff);
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            touch-action: manipulation;
+        }
+        
+        .container {
+            position: relative;
+            height: 100vh;
+            width: 100vw;
+        }
+        
+        .message {
+            position: fixed;
+            top: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: #ff6b6b;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            z-index: 100;
+        }
+        
+        .ground {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 25%;
+            background-color: #7cbe45;
+            border-top: 5px solid #5a9e29;
+        }
+        
+        .sunflower {
+            position: absolute;
+            bottom: 25%;
+            cursor: pointer;
+            z-index: 1;
+        }
+        
+        .flower-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .flower-head {
+            width: 80px;
+            height: 80px;
+            background-color: #FFD700;
+            border-radius: 50%;
+            margin-bottom: -5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        
+        .center {
+            width: 40px;
+            height: 40px;
+            background-color: #663300;
+            border-radius: 50%;
+        }
+        
+        .stem {
+            width: 10px;
+            height: 150px;
+            background-color: #5a9e29;
+            border-left: 2px solid #4c8c1c;
+            border-right: 2px solid #4c8c1c;
+            z-index: 1;
+        }
+        
+        .leaf {
+            position: absolute;
+            width: 40px;
+            height: 20px;
+            background-color: #7cbe45;
+            border-radius: 40% 80% 80% 40%;
+            z-index: 0;
+        }
+        
+        .leaf-left {
+            left: -30px;
+            transform: rotate(-20deg);
+        }
+        
+        .leaf-right {
+            right: -30px;
+            transform: scaleX(-1) rotate(-20deg);
+        }
+        
+        .petal {
+            position: absolute;
+            width: 30px;
+            height: 40px;
+            background-color: #FFD700;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        
+        .btn {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 24px;
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: #ff6b6b;
+            animation: float 4s ease-in-out infinite;
+            opacity: 0;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .sun {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            width: 80px;
+            height: 80px;
+            background-color: #FFD700;
+            border-radius: 50%;
+            box-shadow: 0 0 40px #FFD700;
+            animation: pulse 4s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 40px #FFD700;
+            }
+            100% {
+                transform: scale(1.1);
+                box-shadow: 0 0 60px #FFD700;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .message {
+                font-size: 18px;
+            }
+            
+            .flower-head {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .center {
+                width: 30px;
+                height: 30px;
+            }
+            
+            .petal {
+                width: 20px;
+                height: 30px;
+            }
+            
+            .sun {
+                width: 60px;
+                height: 60px;
+                top: 20px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="message">Para la persona más hermosa del mundo ❤️</div>
+        <div class="sun"></div>
+        <div class="ground"></div>
+        <button class="btn" id="addFlower">Plantar un girasol</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.querySelector('.container');
+            const addButton = document.getElementById('addFlower');
+            const messageElement = document.querySelector('.message');
+            const messages = [
+                "Para la persona más hermosa del mundo ❤️",
+                "Cada girasol representa un momento contigo",
+                "Te quiero más que ayer y menos que mañana",
+                "Eres mi sol de cada día",
+                "Tu sonrisa ilumina mi mundo"
+            ];
+            let messageIndex = 0;
+            
+            // Cambia el mensaje cada 5 segundos
+            setInterval(() => {
+                messageIndex = (messageIndex + 1) % messages.length;
+                messageElement.textContent = messages[messageIndex];
+            }, 5000);
+            
+            addButton.addEventListener('click', createSunflower);
+            
+            // Crea un girasol inicial
+            setTimeout(createSunflower, 500);
+            
+            function createSunflower() {
+                const sunflower = document.createElement('div');
+                sunflower.className = 'sunflower';
+                
+                // Posición aleatoria en el eje X
+                const randomX = Math.random() * (window.innerWidth - 100) + 50;
+                sunflower.style.left = randomX + 'px';
+                
+                // Estructura completa del girasol
+                const flowerContainer = document.createElement('div');
+                flowerContainer.className = 'flower-container';
+                
+                // Cabeza del girasol (PRIMERO la cabeza)
+                const flowerHead = document.createElement('div');
+                flowerHead.className = 'flower-head';
+                
+                // Centro del girasol
+                const center = document.createElement('div');
+                center.className = 'center';
+                flowerHead.appendChild(center);
+                
+                // Pétalos
+                for (let i = 0; i < 12; i++) {
+                    const petal = document.createElement('div');
+                    petal.className = 'petal';
+                    const angle = (i / 12) * 360;
+                    petal.style.transform = `rotate(${angle}deg) translateX(40px)`;
+                    flowerHead.appendChild(petal);
+                }
+                
+                // LUEGO el tallo (para que aparezca debajo de la cabeza)
+                const stem = document.createElement('div');
+                stem.className = 'stem';
+                const stemHeight = Math.floor(Math.random() * 50) + 100;
+                stem.style.height = stemHeight + 'px';
+                
+                // Hojas
+                const leafCount = Math.floor(Math.random() * 2) + 1;
+                for (let i = 0; i < leafCount; i++) {
+                    const leaf = document.createElement('div');
+                    leaf.className = i % 2 === 0 ? 'leaf leaf-left' : 'leaf leaf-right';
+                    leaf.style.top = `${Math.random() * 70 + 40}px`;
+                    stem.appendChild(leaf);
+                }
+                
+                // Añadir elementos en el orden correcto
+                flowerContainer.appendChild(flowerHead);
+                flowerContainer.appendChild(stem);
+                sunflower.appendChild(flowerContainer);
+                
+                // Tamaño aleatorio
+                const scale = Math.random() * 0.5 + 0.7;
+                sunflower.style.transform = `scale(${scale})`;
+                
+                // Añade evento para hacer crecer y liberar corazones
+                sunflower.addEventListener('click', (e) => {
+                    const currentScale = parseFloat(sunflower.style.transform.replace('scale(', '').replace(')', ''));
+                    if (currentScale < 1.5) {
+                        sunflower.style.transform = `scale(${currentScale + 0.1})`;
+                    }
+                    createHeart(e.clientX, e.clientY);
+                });
+                
+                container.appendChild(sunflower);
+                
+                // Efecto de movimiento suave con el viento
+                setInterval(() => {
+                    const swayAmount = Math.sin(Date.now() / 1000) * 5;
+                    sunflower.style.transform = `scale(${scale}) rotate(${swayAmount}deg)`;
+                }, 100);
+            }
+            
+            function createHeart(x, y) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = '❤️';
+                heart.style.left = x + 'px';
+                heart.style.top = y + 'px';
+                
+                container.appendChild(heart);
+                
+                // Elimina el corazón después de la animación
+                setTimeout(() => {
+                    container.removeChild(heart);
+                }, 4000);
+            }
+            
+            // Adaptación para dispositivos móviles
+            if ('ontouchstart' in window) {
+                container.addEventListener('touchstart', function(e) {
+                    if (e.target.classList.contains('sunflower') || 
+                        e.target.closest('.sunflower')) {
+                        const touch = e.touches[0];
+                        createHeart(touch.clientX, touch.clientY);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
